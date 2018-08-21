@@ -2,11 +2,11 @@
   "name": "mocksse",
   "version": "0.1.0-alpha.1",
   "description": "Allows testing of EventSource / Server Sent Events",
-  "main": "mockevent.js",
+  "main": "src/mocksse.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-    "repository": {
+  "repository": {
     "type": "git",
     "url": "git+https://gitlan.com/binarymist/mocksse.git"
   },
@@ -22,6 +22,18 @@
   "author": {
     "name": "BinaryMist",
     "email": "services@binarymist.net"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "code": "^5.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "lab": "^15.5.0",
+    "npm-check": "^5.7.1",
+    "pre-commit": "^1.2.2",
+    "rewire": "^4.0.1",
+    "sinon": "^6.1.5"
   },
   "license": "MIT",
   "bugs": "https://gitlab.com/binarymist/mocksse/issues"
