@@ -1,15 +1,17 @@
 {
   "name": "mocksse",
-  "version": "1.0.0",
-  "description": "Allows testing of Server Sent Events",
+  "version": "0.1.0-alpha.1",
+  "description": "Allows testing of EventSource / Server Sent Events",
   "main": "mockevent.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+    "repository": {
+    "type": "git",
+    "url": "git+https://gitlan.com/binarymist/mocksse.git"
+  },
   "keywords": [
-    "Server",
-    "Sent",
-    "Events",
+    "Server Sent Events",
     "SSE",
     "mock",
     "mocking",
@@ -17,6 +19,10 @@
     "testing",
     "EventSource"
   ],
-  "author": "BinaryMist",
-  "license": "ISC"
+  "author": {
+    "name": "BinaryMist",
+    "email": "services@binarymist.net"
+  },
+  "license": "MIT",
+  "bugs": "https://gitlab.com/binarymist/mocksse/issues"
 }
