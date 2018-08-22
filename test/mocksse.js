@@ -170,10 +170,7 @@ describe('Mock EventSource', () => {
 
 
   it(' - should invoke error handler if no responses or response function provided', async (flags) => {
-
-    const mockEvent = new MockEvent({
-      url: 'http://noPlaceLikeHome:2000/your-route'
-    });
+    const mockEvent = new MockEvent({ url: 'http://noPlaceLikeHome:2000/your-route' });
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     let errorHandlerInvoked = false;
     await new Promise((resolve) => {
@@ -191,8 +188,32 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - ', async (flags) => {
+  it(' - response function should be called', async (flags) => {
+    const eventIdOne = pseudoRandId();
+    const eventData = { lastEventId: eventIdOne, type: 'yourEvent', data: { yourProp: 'Oh, wow, nearly done!' } };
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      setInterval: 1,
+      response: (handler, evtSource) => {
+        const data = [eventData];
+        handler.stream(data);
+      }
+    });
 
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    let eventHandlerInvoked = false;
+    await new Promise((resolve) => {
+      evtSource.addEventListener('yourEvent', (event) => {
+        expect(event).to.equal({ ...eventData, origin: event.origin });
+        eventHandlerInvoked = true;
+        resolve();
+      });
+    });
+
+    flags.onCleanup = () => {
+      expect(eventHandlerInvoked).to.be.true();
+      mockEvent.clear();
+    };
   });
 
 
