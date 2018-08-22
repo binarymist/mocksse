@@ -217,27 +217,63 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - ', async (flags) => {
+  it(' - responses with no elements should pass error to error handler', async (flags) => {
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      responses: []
+    });
+
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    let errorHandlerInvoked = false;
+    await new Promise((resolve) => {
+      evtSource.onerror = (error) => {
+        expect(error.message).to.equal('Handler for URL "http://noPlaceLikeHome:2000/your-route" requires response type attribute');
+        errorHandlerInvoked = true;
+        resolve();
+      };
+    });
+
+    flags.onCleanup = () => {
+      expect(errorHandlerInvoked).to.be.true();
+      mockEvent.clear();
+    };
+  });
+
+
+  it(' - responses with empty elements should dispatchError to error handler', async (flags) => {
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      responses: [{}, {}]
+    });
+
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    let errorHandlerInvoked = false;
+    await new Promise((resolve) => {
+      evtSource.onerror = (error) => {
+        expect(error.message).to.equal('`type` and `data` are required on mock handler response object');
+        errorHandlerInvoked = true;
+        resolve();
+      };
+    });
+
+    flags.onCleanup = () => {
+      expect(errorHandlerInvoked).to.be.true();
+      mockEvent.clear();
+    };
+  });
+
+
+  it(' - responses with no lastEventId should not ..', async (flags) => {
 
   });
 
 
-  it(' - ', async (flags) => {
+  it(' - responses with no type or data should fail', async (flags) => {
 
   });
 
 
-  it(' - ', async (flags) => {
-
-  });
-
-
-  it(' - ', async (flags) => {
-
-  });
-
-
-  it(' - ', async (flags) => {
+  it(' - responses with no type and data should fail', async (flags) => {
 
   });
 
