@@ -14,6 +14,9 @@ const calledOnce = 1;
 
 
 describe('Mock EventSource', () => {
+  before((flags) => {
+    flags.context.incrementCallCount = (eventType, handlerCallCounts) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; }; // eslint-disable-line no-param-reassign
+  });
   it(' - should handle an event to relative url', async (flags) => {
     const numberOfEvents = 1;
     const mockEvent = new MockEvent({
@@ -46,6 +49,7 @@ describe('Mock EventSource', () => {
 
   it(' - should handle an event to full url', async (flags) => {
     const numberOfEvents = 1;
+
     const mockEvent = new MockEvent({
       url: 'http://noPlaceLikeHome:2000/your-route',
       responses: [
@@ -76,6 +80,7 @@ describe('Mock EventSource', () => {
 
 
   it(' - should handle an event with setInterval, and collection of full responses', async (flags) => {
+    const { context: { incrementCallCount } } = flags;
     const eventIdOne = pseudoRandId();
     const eventIdTwo = pseudoRandId();
     const eventIdthree = pseudoRandId();
@@ -91,8 +96,6 @@ describe('Mock EventSource', () => {
     });
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     const handlerCallCounts = [{ progressEvent: 0 }, { pctCompleteEvent: 0 }, { temperatureEvent: 0 }];
-    const incrementCallCount = (eventType) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; };
-
     await new Promise((resolve) => {
       const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
       evtSource.addEventListener('progressEvent', (event) => {
@@ -100,7 +103,7 @@ describe('Mock EventSource', () => {
         expect(event.data).to.equal({ progress: 'Look mum, I am making great progress' });
         expect(event.origin).to.equal('http://noPlaceLikeHome:2000');
         expect(event.lastEventId).to.equal(eventIdOne);
-        incrementCallCount(event.type);
+        incrementCallCount(event.type, handlerCallCounts);
         resolveIfDone();
       });
       evtSource.addEventListener('pctCompleteEvent', (event) => {
@@ -108,7 +111,7 @@ describe('Mock EventSource', () => {
         expect(event.data).to.equal({ pctComplete: 11 });
         expect(event.origin).to.equal('http://noPlaceLikeHome:2000');
         expect(event.lastEventId).to.equal(eventIdTwo);
-        incrementCallCount(event.type);
+        incrementCallCount(event.type, handlerCallCounts);
         resolveIfDone();
       });
       evtSource.addEventListener('temperatureEvent', (event) => {
@@ -116,7 +119,7 @@ describe('Mock EventSource', () => {
         expect(event.data).to.equal({ temperature: 25 });
         expect(event.origin).to.equal('http://noPlaceLikeHome:2000');
         expect(event.lastEventId).to.equal(eventIdthree);
-        incrementCallCount(event.type);
+        incrementCallCount(event.type, handlerCallCounts);
         resolveIfDone();
       });
     });
@@ -126,6 +129,7 @@ describe('Mock EventSource', () => {
 
 
   it(' - onopen handler should be called when the "open" event is received', async (flags) => {
+    const { context: { incrementCallCount } } = flags;
     const eventIdOne = pseudoRandId();
 
     const mockEvent = new MockEvent({
@@ -137,7 +141,6 @@ describe('Mock EventSource', () => {
     });
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     const handlerCallCounts = [{ onopen: 0 }, { yourEvent: 0 }];
-    const incrementCallCount = (eventType) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; };
     await new Promise((resolve) => {
       const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
       evtSource.onopen = (event) => {
@@ -145,7 +148,7 @@ describe('Mock EventSource', () => {
         expect(event).to.equal(expectedEvent);
         expect(handlerCallCounts[0].onopen).to.equal(0);
         expect(handlerCallCounts[1].yourEvent).to.equal(0);
-        incrementCallCount('onopen');
+        incrementCallCount('onopen', handlerCallCounts);
       };
       evtSource.addEventListener('yourEvent', (event) => {
         expect(event.type).to.equal('yourEvent');
@@ -153,7 +156,7 @@ describe('Mock EventSource', () => {
         expect(event.origin).to.equal('http://noPlaceLikeHome:2000');
         expect(event.lastEventId).to.equal(eventIdOne);
         expect(handlerCallCounts[0].onopen).to.equal(1);
-        incrementCallCount(event.type);
+        incrementCallCount(event.type, handlerCallCounts);
         resolveIfDone();
       });
     });
