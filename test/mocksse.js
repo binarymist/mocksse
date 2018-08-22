@@ -263,8 +263,32 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - responses with no lastEventId should not ..', async (flags) => {
+  it(' - closing the EventSource then subscribing to an event should invoke the error handler', async (flags) => {
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      responses: [
+        { type: 'a message event', data: 'a short message' }
+      ]
+    });
 
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+
+    evtSource.close();
+    
+    await new Promise((resolve) => {
+      evtSource.addEventListener('a message event', (event) => {
+        fail('The event handler should not be invoked on a closed EventSource.');
+      });
+
+      evtSource.onerror = (error) => {
+        expect(error.message).to.equal('`EventSource` instance closed while sending.');        
+        resolve();
+      };
+    });
+
+    flags.onCleanup = () => {
+      mockEvent.clear();
+    };
   });
 
 
