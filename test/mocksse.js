@@ -97,7 +97,9 @@ describe('Mock EventSource', () => {
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     const handlerCallCounts = [{ progressEvent: 0 }, { pctCompleteEvent: 0 }, { temperatureEvent: 0 }];
     await new Promise((resolve) => {
-      const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
+      const resolveIfDone = () => {
+        if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
+      };
       evtSource.addEventListener('progressEvent', (event) => {
         expect(event.type).to.equal('progressEvent');
         expect(event.data).to.equal({ progress: 'Look mum, I am making great progress' });
@@ -142,7 +144,9 @@ describe('Mock EventSource', () => {
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     const handlerCallCounts = [{ onopen: 0 }, { yourEvent: 0 }];
     await new Promise((resolve) => {
-      const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
+      const resolveIfDone = () => {
+        if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
+      };
       evtSource.onopen = (event) => {
         const expectedEvent = { message: 'The opening message.', anotherCustomeProp: { prop: 'whatever' } }; // You can see this in the SUT.
         expect(event).to.equal(expectedEvent);
@@ -165,8 +169,25 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - ', async (flags) => {
+  it(' - should invoke error handler if no responses or response function provided', async (flags) => {
 
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route'
+    });
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    let errorHandlerInvoked = false;
+    await new Promise((resolve) => {
+      evtSource.onerror = (error) => {
+        expect(error.message).to.equal('Handler for URL "http://noPlaceLikeHome:2000/your-route" requires response type attribute');
+        errorHandlerInvoked = true;
+        resolve();
+      };
+    });
+
+    flags.onCleanup = () => {
+      expect(errorHandlerInvoked).to.be.true();
+      mockEvent.clear();
+    };
   });
 
 

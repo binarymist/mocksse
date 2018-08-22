@@ -60,7 +60,8 @@ const baseHandler = {
   },
 
   clear() {
-    mockHandlers[this.id] = null;
+    // mockHandlers[this.id] = null;
+    mockHandlers = [];
     delete this;
   },
 
@@ -171,7 +172,7 @@ class EventSource extends EventEmitter {
   // Creates event of type `error`
   // eslint-disable-next-line class-methods-use-this
   error(message) {
-    this.emit('error', message);
+    if (this.onerror) this.onerror(new Error(message));
   }
 
 
@@ -224,7 +225,7 @@ class EventSource extends EventEmitter {
           this.readyState = this.OPEN;
         }
 
-        if (!(mockHandler.allResponses.length || mockHandler.response)) this.error(`Handler ${mockHandler.url} requires response type attribute`);
+        if (!(mockHandler.allResponses.length || mockHandler.response)) this.error(`Handler for URL "${mockHandler.url}" requires response type attribute`);
 
         if (mockHandler.response) mockHandler.response(mockHandler, this);
 
