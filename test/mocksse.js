@@ -266,6 +266,7 @@ describe('Mock EventSource', () => {
   it(' - closing the EventSource then subscribing to an event should invoke the error handler', async (flags) => {
     const mockEvent = new MockEvent({
       url: 'http://noPlaceLikeHome:2000/your-route',
+      verbose: true,
       responses: [
         { type: 'a message event', data: 'a short message' }
       ]

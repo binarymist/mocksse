@@ -87,20 +87,19 @@ const baseHandler = {
   stream(responses) {
     // Handling the stream output via this.setInterval attribute,
     // ironically it's being handled with the `setTimeout` function.
-    const self = this;
     let timeoutId;
     let timeoutValue;
 
-    const streamIt = function () { // eslint-disable-line func-names
+    const streamIt = () => {
       if (responses.length) {
         const response = responses.shift();
-        if (self.evtSource.readyState === self.evtSource.OPEN) {
-          self.lastResponseId = response.lastEventId;
-          self.dispatchEvent(response);
-          self.stream(responses);
+        if (this.evtSource.readyState === this.evtSource.OPEN) {
+          this.lastResponseId = response.lastEventId;
+          this.dispatchEvent(response);
+          this.stream(responses);
         } else {
-          if (this.verbose) console.warn('Missed response because EventSource.close()', response); // eslint-disable-line no-console
-          self.dispatchError('`EventSource` instance closed while sending.');
+          if (this.verbose) console.warn(`The following response was missed because EventSource.close(), ${JSON.stringify(response)}`); // eslint-disable-line no-console
+          this.dispatchError('`EventSource` instance closed while sending.');
         }
       } else {
         clearTimeout(timeoutId);
@@ -109,13 +108,13 @@ const baseHandler = {
     };
 
     if (!timeoutId) {
-      if (self.setInterval instanceof Array) {
-        const min = self.setInterval[0];
-        const max = self.setInterval[1];
+      if (this.setInterval instanceof Array) {
+        const min = this.setInterval[0];
+        const max = this.setInterval[1];
         timeoutValue = (Math.random() * (max - min)) + min;
         timeoutId = setTimeout(streamIt, timeoutValue);
       } else {
-        timeoutValue = self.setInterval;
+        timeoutValue = this.setInterval;
         timeoutId = setTimeout(streamIt, timeoutValue);
       }
 
