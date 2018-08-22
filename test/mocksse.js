@@ -10,9 +10,11 @@ const readFileAsync = require('util').promisify(require('fs').readFile);
 const { MockEvent, EventSource } = require('../src//mocksse');
 const pseudoRandId = () => Math.random().toString().substring(2);
 
+const calledOnce = 1;
+
 
 describe('Mock EventSource', () => {
-  it('- should handle an event to relative url', async (flags) => {
+  it(' - should handle an event to relative url', async (flags) => {
     const numberOfEvents = 1;
     const mockEvent = new MockEvent({
       url: '/your-relative-or-absolute-url',
@@ -42,7 +44,7 @@ describe('Mock EventSource', () => {
   });
 
 
-  it('- should handle an event to full url', async (flags) => {
+  it(' - should handle an event to full url', async (flags) => {
     const numberOfEvents = 1;
     const mockEvent = new MockEvent({
       url: 'http://noPlaceLikeHome:2000/your-route',
@@ -73,7 +75,7 @@ describe('Mock EventSource', () => {
   });
 
 
-  it('- should handle an event with setInterval, and collection of full responses', async (flags) => {
+  it(' - should handle an event with setInterval, and collection of full responses', async (flags) => {
     const eventIdOne = pseudoRandId();
     const eventIdTwo = pseudoRandId();
     const eventIdthree = pseudoRandId();
@@ -89,15 +91,10 @@ describe('Mock EventSource', () => {
     });
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
     const handlerCallCounts = [{ progressEvent: 0 }, { pctCompleteEvent: 0 }, { temperatureEvent: 0 }];
-
-    const incrementCallCount = (eventType) => {
-      handlerCallCounts.find(counter => Object.keys(counter)[0] === eventType)[eventType] += 1;
-    };
+    const incrementCallCount = (eventType) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; };
 
     await new Promise((resolve) => {
-      const calledOnce = 1;
-      const resolveIfDone = () => { if (handlerCallCounts.filter(counter => counter[Object.keys(counter)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
-
+      const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
       evtSource.addEventListener('progressEvent', (event) => {
         expect(event.type).to.equal('progressEvent');
         expect(event.data).to.equal({ progress: 'Look mum, I am making great progress' });
@@ -125,6 +122,93 @@ describe('Mock EventSource', () => {
     });
 
     flags.onCleanup = () => { mockEvent.clear(); };
+  });
+
+
+  it(' - onopen handler should be called when the "open" event is received', async (flags) => {
+    const eventIdOne = pseudoRandId();
+
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      setInterval: 1,
+      responses: [
+        { lastEventId: eventIdOne, type: 'yourEvent', data: { yourProp: 'Oh, wow, nearly done!' } }
+      ]
+    });
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    const handlerCallCounts = [{ onopen: 0 }, { yourEvent: 0 }];
+    const incrementCallCount = (eventType) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; };
+    await new Promise((resolve) => {
+      const resolveIfDone = () => { if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve(); };
+      evtSource.onopen = (event) => {
+        const expectedEvent = { message: 'The opening message.', anotherCustomeProp: { prop: 'whatever' } }; // You can see this in the SUT.
+        expect(event).to.equal(expectedEvent);
+        expect(handlerCallCounts[0].onopen).to.equal(0);
+        expect(handlerCallCounts[1].yourEvent).to.equal(0);
+        incrementCallCount('onopen');
+      };
+      evtSource.addEventListener('yourEvent', (event) => {
+        expect(event.type).to.equal('yourEvent');
+        expect(event.data).to.equal({ yourProp: 'Oh, wow, nearly done!' });
+        expect(event.origin).to.equal('http://noPlaceLikeHome:2000');
+        expect(event.lastEventId).to.equal(eventIdOne);
+        expect(handlerCallCounts[0].onopen).to.equal(1);
+        incrementCallCount(event.type);
+        resolveIfDone();
+      });
+    });
+
+    flags.onCleanup = () => { mockEvent.clear(); };
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
+  });
+
+
+  it(' - ', async (flags) => {
+
   });
 });
 
