@@ -293,8 +293,32 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - responses with no type or data should fail', async (flags) => {
+  it(' - interval should deliver correct numbers based on input range', async (flags) => {
+    let iterationCount = 0;
+    let firstElement = 100;
+    let secondElement = 200;
+    const elementSwaps = 2;
+    const innerIterations = 100;
 
+    for (let elementPermatationIncrementer = 0; elementPermatationIncrementer < elementSwaps; elementPermatationIncrementer += 1) {
+      const mockEvent = new MockEvent({
+        url: 'http://noPlaceLikeHome:2000/your-route',
+        setInterval: [firstElement, secondElement],
+        responses: [{ type: 'a message event', data: 'a short message' }]
+      });
+
+      for (let i = 0; i < innerIterations; i += 1) {
+        expect(mockEvent.interval()).to.be.within(100, 200);
+        iterationCount += 1;
+      }
+
+      const temp = secondElement;
+      secondElement = firstElement;
+      firstElement = temp;
+      mockEvent.clear();
+    }
+
+    flags.onCleanup = () => { expect(iterationCount).to.equal(innerIterations * elementSwaps); };
   });
 
 
