@@ -219,27 +219,16 @@ class EventSource extends EventEmitter {
         // EventSource calls `onerror` method
         this.listenForErrors(mockHandler);
 
-        if (this.readyState === null) {
-          this.readyState = this.CONNECTING;
-        }
-
+        if (this.readyState === null) this.readyState = this.CONNECTING;
         if (this.readyState == this.CONNECTING) { // eslint-disable-line eqeqeq
           if (this.onopen) this.onopen({ message: 'The opening message.', anotherCustomeProp: { prop: 'whatever' } });
           this.readyState = this.OPEN;
         }
-
         if (!(mockHandler.allResponses.length || mockHandler.response)) this.error(`Handler for URL "${mockHandler.url}" requires response type attribute`);
-
         if (mockHandler.response) mockHandler.response(mockHandler, this);
-
         if (mockHandler.responses) mockHandler.stream([...mockHandler.responses]);
       });
-
-      if (this.handler === undefined) {
-        /* A handler was never found for this `EventSource`
-        instance. In this case we send a Timeout Error. */
-        this.error('Timeout Error');
-      }
+      if (this.handler === undefined) this.error(`There was no event handler found for EventSource with url: ${this.url}`);
     }, internals.mockEventProps.setTimeout);
   }
 }
