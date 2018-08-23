@@ -280,7 +280,6 @@ describe('Mock EventSource', () => {
       evtSource.addEventListener('a message event', (event) => {
         fail('The event handler should not be invoked on a closed EventSource.');
       });
-
       evtSource.onerror = (error) => {
         expect(error.message).to.equal('`EventSource` instance closed while sending.');        
         resolve();
@@ -322,8 +321,25 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - responses with no type and data should fail', async (flags) => {
+  it(' - an event with different url to the EventSource should fail with meaningful error', async (flags) => {
+    const eventSourceUrl = 'http://noPlaceLikeHome:2000/your-route';
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/foo-bar',
+      responses: [{ type: 'a message event', data: 'a short message' }]
+    });
 
+    const evtSource = new EventSource(eventSourceUrl);
+    await new Promise((resolve) => {
+      evtSource.addEventListener('a message event', (event) => {
+        fail('The event handler should not be invoked on an incorrect event url.');
+      });
+      evtSource.onerror = (error) => {
+        expect(error.message).to.equal(`There was no event handler found for EventSource with url: ${eventSourceUrl}`);
+        resolve();
+      };
+    });
+
+    flags.onCleanup = () => { mockEvent.clear(); };
   });
 
 
