@@ -1,13 +1,9 @@
 exports.lab = require('lab').script();
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab;
-
+const { describe, it, before } = exports.lab;
 const { expect, fail } = require('code');
-const sinon = require('sinon');
-const rewire = require('rewire');
-const readFileAsync = require('util').promisify(require('fs').readFile);
-
 const { MockEvent, EventSource } = require('../src//mocksse');
+
 const pseudoRandId = () => Math.random().toString().substring(2);
 
 const calledOnce = 1;
@@ -15,7 +11,10 @@ const calledOnce = 1;
 
 describe('Mock EventSource', () => {
   before((flags) => {
-    flags.context.incrementCallCount = (eventType, handlerCallCounts) => { handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; }; // eslint-disable-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign
+    flags.context.incrementCallCount = (eventType, handlerCallCounts) => {
+      handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; // eslint-disable-line no-param-reassign
+    };
   });
   it(' - should handle an event to relative url', async (flags) => {
     const numberOfEvents = 1;
@@ -194,7 +193,7 @@ describe('Mock EventSource', () => {
     const mockEvent = new MockEvent({
       url: 'http://noPlaceLikeHome:2000/your-route',
       setInterval: 1,
-      response: (handler, evtSource) => {
+      response: (handler, evtSource) => { // eslint-disable-line no-unused-vars
         const data = [eventData];
         handler.stream(data);
       }
@@ -275,13 +274,13 @@ describe('Mock EventSource', () => {
     const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
 
     evtSource.close();
-    
+
     await new Promise((resolve) => {
-      evtSource.addEventListener('a message event', (event) => {
+      evtSource.addEventListener('a message event', (event) => { // eslint-disable-line no-unused-vars
         fail('The event handler should not be invoked on a closed EventSource.');
       });
       evtSource.onerror = (error) => {
-        expect(error.message).to.equal('`EventSource` instance closed while sending.');        
+        expect(error.message).to.equal('`EventSource` instance closed while sending.');
         resolve();
       };
     });
@@ -330,7 +329,7 @@ describe('Mock EventSource', () => {
 
     const evtSource = new EventSource(eventSourceUrl);
     await new Promise((resolve) => {
-      evtSource.addEventListener('a message event', (event) => {
+      evtSource.addEventListener('a message event', (event) => { // eslint-disable-line no-unused-vars
         fail('The event handler should not be invoked on an incorrect event url.');
       });
       evtSource.onerror = (error) => {
@@ -341,20 +340,4 @@ describe('Mock EventSource', () => {
 
     flags.onCleanup = () => { mockEvent.clear(); };
   });
-
-
-  it(' - ', async (flags) => {
-
-  });
-
-
-  it(' - ', async (flags) => {
-
-  });
-
-
-  it(' - ', async (flags) => {
-
-  });
 });
-

@@ -36,9 +36,7 @@
     "eslint-plugin-import": "^2.12.0",
     "lab": "^15.5.0",
     "npm-check": "^5.7.1",
-    "pre-commit": "^1.2.2",
-    "rewire": "^4.0.1",
-    "sinon": "^6.1.5"
+    "pre-commit": "^1.2.2"
   },
   "license": "MIT",
   "bugs": "https://gitlab.com/binarymist/mocksse/issues"
