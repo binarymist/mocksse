@@ -4,8 +4,7 @@ const internals = {
   mockEventProps: {
     setTimeout: 0,
     setInterval: 0,
-    verbose: false,
-    on: true
+    verbose: false
   },
   origin: null
 };
@@ -23,7 +22,6 @@ const baseHandler = {
   responses: [],
   response: null,
   proxy: null,
-  on: internals.mockEventProps.on,
   allResponses: [],
 
   initialize() {
@@ -85,6 +83,26 @@ const baseHandler = {
     this.evtSource.emit(this.errorEventName(), errorMessage);
   },
 
+
+  interval() {
+    if (this.setInterval instanceof Array) {
+      let min;
+      let max;
+      const firstElement = 0;
+      const secondElement = 1;
+      if (this.setInterval[firstElement] < this.setInterval[secondElement]) {
+        min = this.setInterval[firstElement];
+        max = this.setInterval[secondElement];
+      } else {
+        min = this.setInterval[secondElement];
+        max = this.setInterval[firstElement];
+      }
+      return (Math.random() * (max - min)) + min;
+    }
+    return this.setInterval;
+  },
+
+
   stream(responses) {
     // Handling the stream output via this.setInterval attribute,
     // ironically it's being handled with the `setTimeout` function.
@@ -109,29 +127,12 @@ const baseHandler = {
     };
 
     if (!timeoutId) {
-      if (this.setInterval instanceof Array) {
-        const min = this.setInterval[0];
-        const max = this.setInterval[1];
-        timeoutValue = (Math.random() * (max - min)) + min;
-        timeoutId = setTimeout(streamIt, timeoutValue);
-      } else {
-        timeoutValue = this.setInterval;
-        timeoutId = setTimeout(streamIt, timeoutValue);
-      }
+      timeoutValue = this.interval();
+      timeoutId = setTimeout(streamIt, timeoutValue);
 
       // Logging on `verbose` = True
-      if (this.verbose && responses.length) {
-        console.info(`Send stream in ${timeoutValue} milliseconds.`); // eslint-disable-line no-console
-      }
+      if (this.verbose && responses.length) console.info(`Send stream in ${timeoutValue} milliseconds.`); // eslint-disable-line no-console
     }
-  },
-
-  stop() {
-    this.on = false;
-  },
-
-  start() {
-    this.on = true;
   }
 };
 
