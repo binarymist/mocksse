@@ -6,7 +6,8 @@ const internals = {
     setInterval: 0,
     verbose: false,
     on: true
-  }
+  },
+  origin: null
 };
 
 let mockHandlers = [];
@@ -34,7 +35,7 @@ const baseHandler = {
       'Access-Control-Allow-Credentials': true,
       'Access-Control-Allow-Headers': 'Content-type,Authorization',
       'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      'Access-Control-Allow-Origin': `${internals.protocol}//${internals.host}`,
+      'Access-Control-Allow-Origin': internals.origin,
       'Access-Control-Expose-Headers': '*',
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive',
@@ -140,14 +141,16 @@ class EventSource extends EventEmitter {
     super();
     this.url = url;
     this.settings = settings;
-
     this.CONNECTING = 0;
     this.OPEN = 1;
     this.CLOSED = 2;
-
     this.readyState = null;
-
     this.responses = [];
+    if (url.includes('//')) {
+      const originParts = url.split('/', 3);
+      internals.origin = originParts.reduce((origin, parts) => `${origin}/${parts}`);
+      internals.host = originParts[2].split(':', 1)[0]; // eslint-disable-line prefer-destructuring
+    }
 
     this.scheduleEvents();
   }
@@ -163,8 +166,8 @@ class EventSource extends EventEmitter {
       // 'Cookie': docCookies.cookiesToString(),
       Host: internals.host,
       // 'Last-event-id': this.handler.lastResponseId || '',
-      Origin: `${internals.protocol}//${internals.host}`,
-      Referer: `${internals.protocol}//${internals.host}`
+      Origin: internals.origin,
+      Referer: internals.origin
     };
   }
 
