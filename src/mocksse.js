@@ -14,7 +14,6 @@ const missed = [];
 
 
 const baseHandler = {
-
   id: null,
   url: '',
   setInterval: internals.mockEventProps.setInterval,
@@ -83,7 +82,6 @@ const baseHandler = {
     this.evtSource.emit(this.errorEventName(), errorMessage);
   },
 
-
   interval() {
     if (this.setInterval instanceof Array) {
       let min;
@@ -101,7 +99,6 @@ const baseHandler = {
     }
     return this.setInterval;
   },
-
 
   stream(responses) {
     // Handling the stream output via this.setInterval attribute,
@@ -246,27 +243,19 @@ class MockEvent {
 
   // eslint-disable-next-line class-methods-use-this
   clear(i) {
-    if (i || i === 0) {
-      mockHandlers[i] = null;
-    } else {
-      mockHandlers = [];
-    }
+    if (i || i === 0) mockHandlers[i] = null;
+    else mockHandlers = [];
   }
 
   // eslint-disable-next-line class-methods-use-this
   handlers(i) {
-    if (i || i === 0) return mockHandlers[i];
+    if (i || i === 0) { return mockHandlers[i]; }
     return mockHandlers;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  missed() {
-    return missed;
-  }
+  missed() { return missed; }
 }
 
 
-module.exports = {
-  MockEvent,
-  EventSource
-};
+module.exports = { MockEvent, EventSource };
