@@ -17,4 +17,4 @@ Test:
   before_script:
    - npm install
   script:
-   - lab --assert code
+   - npm run test
