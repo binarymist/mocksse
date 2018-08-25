@@ -116,7 +116,7 @@ evtSource.addEventListener('temperatureEvent', (event) => {
 
 ### Example 2
 
-Dynamically make responses and then have them `stream`ed (based on test [response function should be called, which then sends event](https://gitlab.com/binarymist/mocksse/blob/494675303c32cc8f5c87e20f8482e8c10bd76742/test/mocksse.js#L190)).
+Dynamically make responses and then have them `stream`ed (based on test [response function should be called, which then sends event](hhttps://gitlab.com/binarymist/mocksse/blob/9362050dfeae6620b85a3827c802374ae3b14dd6/test/mocksse.js#L190)).
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
