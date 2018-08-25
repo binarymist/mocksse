@@ -7,13 +7,13 @@ const { MockEvent, EventSource } = require('../src//mocksse');
 const pseudoRandId = () => Math.random().toString().substring(2);
 
 const calledOnce = 1;
+const calledTwice = 2;
 
 
 describe('Mock EventSource', () => {
   before((flags) => {
-    // eslint-disable-next-line no-param-reassign
     flags.context.incrementCallCount = (eventType, handlerCallCounts) => {
-      handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1; // eslint-disable-line no-param-reassign
+      handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1;
     };
   });
   it(' - should handle an event to relative url', async (flags) => {
@@ -187,13 +187,13 @@ describe('Mock EventSource', () => {
   });
 
 
-  it(' - response function should be called', async (flags) => {
+  it(' - response function should be called, which then sends event', async (flags) => {
     const eventIdOne = pseudoRandId();
     const eventData = { lastEventId: eventIdOne, type: 'yourEvent', data: { yourProp: 'Oh, wow, nearly done!' } };
     const mockEvent = new MockEvent({
       url: 'http://noPlaceLikeHome:2000/your-route',
       setInterval: 1,
-      response: (handler, evtSource) => { // eslint-disable-line no-unused-vars
+      response: (handler, evtSource) => {
         const data = [eventData];
         handler.stream(data);
       }
@@ -213,6 +213,43 @@ describe('Mock EventSource', () => {
       expect(eventHandlerInvoked).to.be.true();
       mockEvent.clear();
     };
+  });
+
+
+  it(' - response function should be called, which then streams events itself', async (flags) => {
+    const { context: { incrementCallCount } } = flags;
+    const eventIdOne = pseudoRandId();
+    const eventIdTwo = pseudoRandId();
+    const eventData = [
+      { lastEventId: eventIdOne, type: 'yourEvent', data: { yourProp: 'Wish I was done!' } },
+      { lastEventId: eventIdTwo, type: 'yourEvent', data: { yourProp: 'Oh, wow, nearly done!' } }
+    ];
+    const mockEvent = new MockEvent({
+      url: 'http://noPlaceLikeHome:2000/your-route',
+      setInterval: 1,
+      response: (handler, evtSource) => {
+        const data = [...eventData];
+        const intervalId = setInterval(() => {
+          const responseData = data.shift() || clearInterval(intervalId);
+          if (responseData) mockEvent.dispatchEvent(responseData);
+        }, mockEvent.setInterval);
+      }
+    });
+
+    const evtSource = new EventSource('http://noPlaceLikeHome:2000/your-route');
+    const handlerCallCounts = [{ yourEvent: 0 }];
+    await new Promise((resolve) => {
+      const resolveIfDone = () => {
+        if (handlerCallCounts[0].yourEvent === calledTwice) resolve();
+      };
+      evtSource.addEventListener('yourEvent', (event) => {
+        expect(event).to.equal({ ...eventData[handlerCallCounts[0].yourEvent], origin: event.origin });
+        incrementCallCount(event.type, handlerCallCounts);
+        resolveIfDone();
+      });
+    });
+
+    flags.onCleanup = () => { mockEvent.clear(); };
   });
 
 
@@ -276,7 +313,7 @@ describe('Mock EventSource', () => {
     evtSource.close();
 
     await new Promise((resolve) => {
-      evtSource.addEventListener('a message event', (event) => { // eslint-disable-line no-unused-vars
+      evtSource.addEventListener('a message event', (event) => {
         fail('The event handler should not be invoked on a closed EventSource.');
       });
       evtSource.onerror = (error) => {
@@ -329,7 +366,7 @@ describe('Mock EventSource', () => {
 
     const evtSource = new EventSource(eventSourceUrl);
     await new Promise((resolve) => {
-      evtSource.addEventListener('a message event', (event) => { // eslint-disable-line no-unused-vars
+      evtSource.addEventListener('a message event', (event) => {
         fail('The event handler should not be invoked on an incorrect event url.');
       });
       evtSource.onerror = (error) => {
