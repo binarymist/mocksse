@@ -22,7 +22,7 @@ This project has no dependencies other than native modules.
 
 ## Install
 
-`npm install mocksee --save-dev`
+`npm install mocksse --save-dev`
 
 ## Usage
 
