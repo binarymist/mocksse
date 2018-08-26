@@ -1,7 +1,7 @@
 
 # MockSSE
 
-[![pipeline status](https://gitlab.com/binarymist/mocksse/badges/master/pipeline.svg)](https://gitlab.com/binarymist/mocksse/commits/master)
+[![pipeline status](https://gitlab.com/binarymist/mocksse/badges/master/pipeline.svg)](https://gitlab.com/binarymist/mocksse/commits/master) &nbsp; [![test coverage](https://gitlab.com/binarymist/mocksse/badges/master/coverage.svg)](https://gitlab.com/binarymist/mocksse/commits/master)
 
 This project is a port/rewrite of [MockEvent](https://github.com/eloyz/mockevent) (which targets the browser). Instead, this project was designed for mocking EventSource (specifically the npm package [eventsource](https://github.com/EventSource/eventsource)) /Server Sent Events (SSE) where both your server side and client side are written for the NodeJS platform.
 
