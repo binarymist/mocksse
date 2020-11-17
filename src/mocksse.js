@@ -1,3 +1,4 @@
+/* eslint max-classes-per-file: ["error", 2] */
 const EventEmitter = require('events');
 
 const internals = {
@@ -42,7 +43,7 @@ const baseHandler = {
   },
 
   urlMatches(url) {
-    const isFunction = functionToCheck => functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+    const isFunction = (functionToCheck) => functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
     if (isFunction(this.url.test)) {
       // The user provided a regex for the url, test it
       if (!this.url.test(url)) {

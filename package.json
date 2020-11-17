@@ -7,8 +7,8 @@
     "lint": "eslint .",
     "deps": "npm-check",
     "update:deps": "npm-check -u",
-    "test": "lab --assert code --coverage",
-    "test:debug": "node --inspect-brk ./node_modules/.bin/lab --assert code --timeout 0",
+    "test": "lab --assert @hapi/code --coverage",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/lab --assert @hapi/code --timeout 0",
     "pretest": "npm run lint"
   },
   "repository": {
@@ -30,12 +30,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "code": "^5.2.0",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.12.0",
-    "lab": "^15.5.0",
-    "npm-check": "^5.7.1",
+    "@hapi/code": "^8.0.2",
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "@hapi/lab": "^24.1.0",
+    "npm-check": "^5.9.2",
     "pre-commit": "^1.2.2"
   },
   "license": "MIT",

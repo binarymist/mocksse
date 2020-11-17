@@ -1,8 +1,8 @@
-exports.lab = require('lab').script();
+exports.lab = require('@hapi/lab').script();
 
 const { describe, it, before } = exports.lab;
-const { expect, fail } = require('code');
-const { MockEvent, EventSource } = require('../src//mocksse');
+const { expect, fail } = require('@hapi/code');
+const { MockEvent, EventSource } = require('../src/mocksse');
 
 const pseudoRandId = () => Math.random().toString().substring(2);
 
@@ -13,7 +13,7 @@ const calledTwice = 2;
 describe('Mock EventSource', () => {
   before((flags) => {
     flags.context.incrementCallCount = (eventType, handlerCallCounts) => {
-      handlerCallCounts.find(cntr => Object.keys(cntr)[0] === eventType)[eventType] += 1;
+      handlerCallCounts.find((cntr) => Object.keys(cntr)[0] === eventType)[eventType] += 1;
     };
   });
   it(' - should handle an event to relative url', async (flags) => {
@@ -97,7 +97,7 @@ describe('Mock EventSource', () => {
     const handlerCallCounts = [{ progressEvent: 0 }, { pctCompleteEvent: 0 }, { temperatureEvent: 0 }];
     await new Promise((resolve) => {
       const resolveIfDone = () => {
-        if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
+        if (handlerCallCounts.filter((cntr) => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
       };
       evtSource.addEventListener('progressEvent', (event) => {
         expect(event.type).to.equal('progressEvent');
@@ -144,7 +144,7 @@ describe('Mock EventSource', () => {
     const handlerCallCounts = [{ onopen: 0 }, { yourEvent: 0 }];
     await new Promise((resolve) => {
       const resolveIfDone = () => {
-        if (handlerCallCounts.filter(cntr => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
+        if (handlerCallCounts.filter((cntr) => cntr[Object.keys(cntr)[0]] === calledOnce).length === handlerCallCounts.length) resolve();
       };
       evtSource.onopen = (event) => {
         const expectedEvent = { message: 'The opening message.', anotherCustomeProp: { prop: 'whatever' } }; // You can see this in the SUT.
