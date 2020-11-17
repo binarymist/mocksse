@@ -1,6 +1,6 @@
 {
   "name": "mocksse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Allows testing of EventSource / Server Sent Events",
   "main": "src/mocksse.js",
   "scripts": {
