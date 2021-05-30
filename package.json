@@ -9,7 +9,8 @@
     "update:deps": "npm-check -u",
     "test": "lab --assert @hapi/code --coverage",
     "test:debug": "node --inspect-brk ./node_modules/.bin/lab --assert @hapi/code --timeout 0",
-    "pretest": "npm run lint"
+    "pretest": "npm run lint",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -30,14 +31,17 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hapi/code": "^8.0.2",
-    "eslint": "^7.13.0",
+    "@hapi/code": "^8.0.3",
+    "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "@hapi/lab": "^24.1.0",
+    "eslint-plugin-import": "^2.23.4",
+    "@hapi/lab": "^24.2.1",
     "npm-check": "^5.9.2",
-    "pre-commit": "^1.2.2"
+    "husky": "^6.0.0"
   },
   "license": "MIT",
-  "bugs": "https://gitlab.com/binarymist/mocksse/issues"
+  "bugs": "https://gitlab.com/binarymist/mocksse/issues",
+  "files": [
+    "src"
+  ]
 }

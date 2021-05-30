@@ -2,10 +2,6 @@
 # MockSSE
 
 [![pipeline status](https://gitlab.com/binarymist/mocksse/badges/master/pipeline.svg)](https://gitlab.com/binarymist/mocksse/commits/master) &nbsp; [![test coverage](https://gitlab.com/binarymist/mocksse/badges/master/coverage.svg)](https://gitlab.com/binarymist/mocksse/commits/master) &nbsp; [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://gitlab.com/binarymist/mocksse/blob/master/LICENSE)
-&nbsp;
-<a href="https://github.com/purpleteam-labs/purpleteam/releases" title="latest release">
-  <img src="https://img.shields.io/github/v/release/purpleteam-labs/purpleteam?color=%23794fb8&include_prereleases" alt="GitHub release (latest SemVer including pre-releases)">
-</a>
 
 This project is a port/rewrite of [MockEvent](https://github.com/eloyz/mockevent) (which targets the browser). Instead, this project was designed for mocking EventSource (specifically the npm package [eventsource](https://github.com/EventSource/eventsource)) /Server Sent Events (SSE) where both your server side and client side are written for the NodeJS platform.
 
