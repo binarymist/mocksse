@@ -43,6 +43,8 @@ Getting started with the least amount of work (based on test [`should handle an 
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
+// Or using ESM:
+// import { MockEvent, EventSource } from 'mocksse';
 
 // Instantiate a MockEvent.
 new MockEvent({
@@ -69,6 +71,8 @@ Multiple event listeners (based on test [should handle an event with setInterval
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
+// Or using ESM:
+// import { MockEvent, EventSource } from 'mocksse';
 
 // Instantiate a MockEvent.
 new MockEvent({
@@ -122,6 +126,8 @@ Dynamically make responses and then have them `stream`ed (based on test [respons
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
+// Or using ESM:
+// import { MockEvent, EventSource } from 'mocksse';
 
 // Instantiate a MockEvent.
 new MockEvent({
@@ -161,6 +167,8 @@ Dynamically make responses and then `stream` them yourself within your `response
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
+// Or using ESM:
+// import { MockEvent, EventSource } from 'mocksse';
 
 // Instantiate a MockEvent.
 new MockEvent({
@@ -198,6 +206,8 @@ Closing the EventSource then subscribing to an event will invoke the error handl
 
 ```javascript
 const { MockEvent, EventSource } = require('mocksse');
+// Or using ESM:
+// import { MockEvent, EventSource } from 'mocksse';
 
 // Instantiate a MockEvent.
 const mockEvent = new MockEvent({
