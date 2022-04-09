@@ -31,13 +31,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hapi/code": "^8.0.3",
-    "eslint": "^7.27.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "@hapi/lab": "^24.2.1",
+    "@hapi/code": "^8.0.7",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "@hapi/lab": "^24.6.0",
     "npm-check": "^5.9.2",
-    "husky": "^6.0.0"
+    "husky": "^7.0.4"
   },
   "license": "MIT",
   "bugs": "https://github.com/binarymist/mocksse/issues",

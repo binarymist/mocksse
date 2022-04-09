@@ -239,7 +239,7 @@ class MockEvent {
     internals.mockEventProps.verbose = !!settings.verbose;
     mockHandlers[i] = { ...baseHandler, ...settings, id: i };
     mockHandlers[i].initialize();
-    return mockHandlers[i];
+    return mockHandlers[i]; // eslint-disable-line no-constructor-return
   }
 
   // eslint-disable-next-line class-methods-use-this
