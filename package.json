@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/binarymist/mocksse.git"
+    "url": "git+https://github.com/binarymist/mocksse.git"
   },
   "keywords": [
     "Server Sent Events",
@@ -40,7 +40,7 @@
     "husky": "^6.0.0"
   },
   "license": "MIT",
-  "bugs": "https://gitlab.com/binarymist/mocksse/issues",
+  "bugs": "https://github.com/binarymist/mocksse/issues",
   "files": [
     "src"
   ]
